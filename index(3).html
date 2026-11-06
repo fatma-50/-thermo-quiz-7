@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار إدارة الجودة الشاملة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f0fb;
+  --bg2:#ece5f8;
+  --primary:#7c5cbf;
+  --primary-dark:#5b3fa0;
+  --primary-light:#a78bfa;
+  --lav:#e6defa;
+  --card:#ffffff;
+  --text:#3d3554;
+  --muted:#7a7291;
+  --green:#e6f6ec; --green-b:#2e8b57;
+  --yellow:#fdf3dd; --yellow-b:#c08a1e;
+  --red:#fdeaea;   --red-b:#c04848;
+  --review:#f0ecfd; --review-b:#6d5bd0;
+  --radius:18px;
+  --shadow:0 8px 24px rgba(124,92,191,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cairo',Tahoma,Arial,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.9;
+}
+.container{max-width:820px;margin:0 auto;padding:24px 16px 60px}
+
+/* ---------- شاشة البداية ---------- */
+.hero{
+  background:linear-gradient(135deg,#7c5cbf 0%,#9d7fe8 60%,#b79df0 100%);
+  color:#fff;border-radius:26px;padding:56px 28px;text-align:center;
+  box-shadow:0 14px 40px rgba(124,92,191,.35);
+  position:relative;overflow:hidden;
+}
+.hero::before,.hero::after{
+  content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.10);
+}
+.hero::before{width:220px;height:220px;top:-90px;right:-70px}
+.hero::after{width:160px;height:160px;bottom:-70px;left:-50px}
+.hero h1{font-size:clamp(1.6rem,4.5vw,2.5rem);font-weight:800;margin-bottom:12px;position:relative}
+.hero p{font-size:clamp(.95rem,2.5vw,1.15rem);opacity:.95;position:relative}
+.badges{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:36px 0 28px}
+.badge{
+  background:var(--card);border-radius:16px;padding:18px 22px;flex:1;min-width:200px;
+  box-shadow:var(--shadow);text-align:center;border:1px solid #ece4fa;
+}
+.badge .num{font-size:2rem;font-weight:800;color:var(--primary)}
+.badge .lbl{font-size:.9rem;color:var(--muted)}
+.btn{
+  display:inline-block;border:none;cursor:pointer;font-family:inherit;font-weight:700;
+  border-radius:14px;padding:14px 34px;font-size:1.05rem;transition:.25s;
+}
+.btn-primary{background:var(--primary);color:#fff;box-shadow:0 6px 18px rgba(124,92,191,.35)}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px)}
+.btn-ghost{background:#fff;color:var(--primary);border:2px solid #d9cdf3}
+.btn-ghost:hover{background:var(--lav)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.note{
+  margin-top:26px;background:var(--card);border-radius:14px;padding:14px 18px;
+  font-size:.85rem;color:var(--muted);box-shadow:var(--shadow);border-right:4px solid var(--primary-light);
+}
+
+/* ---------- شاشة الاختبار ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.counter-pill{
+  background:#fff;border-radius:999px;padding:8px 20px;font-weight:700;color:var(--primary-dark);
+  box-shadow:var(--shadow);font-size:.95rem;border:1px solid #e9e0f8;
+}
+.progress-wrap{
+  background:#e4dbf5;border-radius:999px;height:10px;overflow:hidden;margin-bottom:22px;
+}
+.progress-bar{
+  height:100%;background:linear-gradient(90deg,#8b5cf6,#b79df0);border-radius:999px;
+  width:0%;transition:width .4s ease;
+}
+.q-card{
+  background:var(--card);border-radius:var(--radius);padding:30px 26px;box-shadow:var(--shadow);
+  border:1px solid #eee7fa;margin-bottom:22px;
+}
+.q-num{
+  display:inline-block;background:var(--lav);color:var(--primary-dark);font-weight:800;
+  border-radius:10px;padding:3px 14px;font-size:.85rem;margin-bottom:12px;
+}
+.q-text{font-size:clamp(1.05rem,2.8vw,1.3rem);font-weight:700;margin-bottom:20px}
+textarea{
+  width:100%;min-height:130px;resize:vertical;border:2px solid #e2d8f5;border-radius:14px;
+  padding:14px 16px;font-family:inherit;font-size:1rem;color:var(--text);background:#fbf9ff;
+  transition:.2s;line-height:1.9;
+}
+textarea:focus{outline:none;border-color:var(--primary-light);background:#fff;box-shadow:0 0 0 4px rgba(167,139,250,.15)}
+textarea.answered{border-color:#b9e6c9;background:#f4fcf7}
+.fields-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.field-box label{display:block;font-weight:700;color:var(--primary-dark);margin-bottom:6px;font-size:.95rem}
+.nav-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:20px 0}
+.dot{
+  width:38px;height:38px;border-radius:50%;border:2px solid #d9cdf3;background:#fff;color:var(--primary);
+  font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;font-size:.9rem;
+}
+.dot:hover{border-color:var(--primary-light)}
+.dot.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.dot.done{background:#e0f5e9;border-color:#8fd3ab;color:#237a4b}
+
+/* ---------- شاشة النتيجة ---------- */
+.result-hero{
+  background:linear-gradient(135deg,#7c5cbf,#a78bfa);color:#fff;border-radius:26px;
+  padding:44px 24px;text-align:center;box-shadow:0 14px 40px rgba(124,92,191,.35);margin-bottom:26px;
+}
+.score-circle{
+  width:150px;height:150px;border-radius:50%;margin:0 auto 18px;background:rgba(255,255,255,.15);
+  border:4px solid rgba(255,255,255,.45);display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-circle .big{font-size:2.4rem;font-weight:800;line-height:1.1}
+.score-circle .small{font-size:.85rem;opacity:.85}
+.grade-word{font-size:1.4rem;font-weight:800;margin-bottom:6px}
+.percent{color:#efe8ff;font-weight:700}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:30px}
+.stat{border-radius:16px;padding:18px;text-align:center;box-shadow:var(--shadow);border:1px solid #eee7fa}
+.stat .n{font-size:1.9rem;font-weight:800}
+.stat .t{font-size:.85rem;color:var(--muted)}
+.stat.g{background:var(--green)} .stat.g .n{color:var(--green-b)}
+.stat.y{background:var(--yellow)} .stat.y .n{color:var(--yellow-b)}
+.stat.r{background:var(--red)} .stat.r .n{color:var(--red-b)}
+.stat.v{background:var(--review)} .stat.v .n{color:var(--review-b)}
+.rev-card{
+  border-radius:var(--radius);padding:24px;margin-bottom:18px;border:1px solid #eee7fa;
+  box-shadow:var(--shadow);background:#fff;
+}
+.rev-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.rev-q{font-weight:800;font-size:1.05rem;color:var(--primary-dark)}
+.rev-status{
+  border-radius:999px;padding:4px 16px;font-size:.82rem;font-weight:800;white-space:nowrap;
+}
+.st-ok{background:var(--green);color:var(--green-b)}
+.st-partial{background:var(--yellow);color:var(--yellow-b)}
+.st-bad{background:var(--red);color:var(--red-b)}
+.st-review{background:var(--review);color:var(--review-b)}
+.rev-score{font-weight:800;color:var(--primary);margin-bottom:12px}
+.rev-block{background:#faf8ff;border-radius:12px;padding:12px 16px;margin-bottom:10px;font-size:.93rem}
+.rev-block b{color:var(--primary-dark)}
+.rev-why{background:#f3eefc;border-radius:12px;padding:12px 16px;font-size:.9rem;color:#4a3f68}
+.review-list{background:var(--review);border:1px dashed var(--review-b);border-radius:14px;
+  padding:14px 18px;margin-bottom:24px;font-size:.92rem;color:#4a3f68}
+.footer-note{margin-top:26px;font-size:.82rem;color:var(--muted);text-align:center;line-height:2}
+.hidden{display:none !important}
+@media(max-width:560px){
+  .q-card{padding:22px 16px}
+  .nav-row{justify-content:center}
+  .btn{padding:12px 24px;font-size:.95rem}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== شاشة البداية ===== -->
+  <section id="startScreen">
+    <div class="hero">
+      <h1>اختبار إدارة الجودة الشاملة</h1>
+      <p>أهلًا بك أيها الطالب! أنت على بعد خطوة واحدة من تقييم مستواك في مادة إدارة الجودة الشاملة.</p>
+    </div>
+    <div class="badges">
+      <div class="badge"><div class="num">7</div><div class="lbl">أسئلة في الاختبار</div></div>
+      <div class="badge"><div class="num">100</div><div class="lbl">الدرجة الكلية</div></div>
+      <div class="badge"><div class="num">مقالي</div><div class="lbl">أسئلة مقالية وتعداد وإكمال</div></div>
+    </div>
+    <div style="text-align:center">
+      <button class="btn btn-primary" onclick="startQuiz()">ابدأ الاختبار</button>
+    </div>
+    <div class="note">
+      تعليمات: اقرأ كل سؤال بعناية ثم اكتب إجابتك بأسلوبك الخاص. في السؤال الثالث ستجد أربع خانات منفصلة لعناصر التحسين المستمر. يمكنك التنقل بين الأسئلة بحرية، وستُحفظ إجاباتك تلقائيًا.
+    </div>
+  </section>
+
+  <!-- ===== شاشة الاختبار ===== -->
+  <section id="quizScreen" class="hidden">
+    <div class="topbar">
+      <div class="counter-pill">الأسئلة المجاب عنها: <span id="answeredCount">0</span> / 7</div>
+      <div class="counter-pill">السؤال <span id="qNow">1</span> من 7</div>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div class="q-card" id="qCard"></div>
+
+    <div class="dots" id="dots"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="prevBtn" onclick="goTo(current-1)">السؤال السابق</button>
+      <button class="btn btn-ghost" id="nextBtn" onclick="goTo(current+1)">السؤال التالي</button>
+      <button class="btn btn-primary" onclick="submitQuiz()">تسليم الاختبار</button>
+    </div>
+  </section>
+
+  <!-- ===== شاشة النتيجة ===== -->
+  <section id="resultScreen" class="hidden">
+    <div class="result-hero">
+      <div class="score-circle">
+        <div class="big" id="finalScore">0</div>
+        <div class="small">من 100</div>
+      </div>
+      <div class="grade-word" id="gradeWord"></div>
+      <div class="percent" id="percentText"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat g"><div class="n" id="cOk">0</div><div class="t">إجابات صحيحة</div></div>
+      <div class="stat y"><div class="n" id="cPartial">0</div><div class="t">إجابات جزئية</div></div>
+      <div class="stat v"><div class="n" id="cReview">0</div><div class="t">تحتاج مراجعة</div></div>
+      <div class="stat r"><div class="n" id="cBad">0</div><div class="t">إجابات خاطئة</div></div>
+    </div>
+
+    <div id="reviewBanner"></div>
+    <h2 style="color:var(--primary-dark);margin-bottom:16px">المراجعة التفصيلية للأسئلة</h2>
+    <div id="reviewList"></div>
+
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn btn-primary" onclick="location.reload()">إعادة الاختبار من البداية</button>
+    </div>
+    <div class="footer-note">
+      تنبيه: التصحيح الآلي يعتمد على تحليل الكلمات الأساسية والمرادفات والعناصر العلمية للأسئلة، وهو مساعد قوي لكنه لا يعادل التصحيح البشري الدقيق؛ لذلك وُضعت الإجابات غير المؤكدة في خانة «تحتاج مراجعة» ليحسمها المدرس.
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ================= الأسئلة والإجابات النموذجية ================= */
+const QUESTIONS = [
+  {
+    text:"التحسين المستمر بماذا يذكرك؟",
+    model:"جوران حينما يتحدث عن أهمية التدريب في عمليات التحسين وأنه وسيلة التحسين المستمر.",
+    max:10, type:"essay",
+    groups:[
+      {name:"ذِكر عالم الجودة «جوران»", w:5, kw:["جوران"]},
+      {name:"الربط بين التدريب والتحسين المستمر", w:3, kw:["تدريب"]},
+      {name:"أن التدريب وسيلة/أداة فعالة للتحسين", w:2, kw:["وسيله","وسائل","اهم","اهميه","فعال","اداه","اداة","دور"]}
+    ]
+  },
+  {
+    text:"ما علاقة التدريب بفرق العمل؟",
+    model:"لأن التدريب موجه للموارد البشرية بالمؤسسة بهدف تنمية قدراتهم ومهاراتهم والتي تقسم لفرق عمل تعمل على تطوير وتحسين العمل بالمؤسسة.",
+    max:15, type:"essay",
+    groups:[
+      {name:"التدريب موجَّه للموارد البشرية (الأفراد والعاملين)", w:4, kw:["موارد بشريه","عناصر بشريه","العاملين","العاملون","موظف","موظفين","افراد","الناس"]},
+      {name:"تنمية القدرات ورفع المهارات", w:5, kw:["قدرات","مهارات","مهاره","قدره","تنميه","تطوير","رفع","اكساب"]},
+      {name:"تقسيم الموارد البشرية إلى فرق عمل", w:3, kw:["فرق عمل","فريق عمل","فرق","فريق"]},
+      {name:"عمل الفرق على تطوير وتحسين العمل بالمؤسسة", w:3, kw:["تطوير","تحسين","اداء","جوده","عمل المؤسسه","سير العمل"]}
+    ]
+  },
+  {
+    text:"كيف يتم التحسين المستمر؟ (اكتب العناصر الأربعة، كل عنصر في خانة مستقلة)",
+    model:"1) ببناء قنوات اتصال فعالة تكون إما داخلية أو خارجية. 2) قياس درجة رضا العميل (عميل داخلي وعميل خارجي) ويقع تحت مبدأ التركيز على العميل. 3) قياس الأداء. 4) التدريب.",
+    max:20, type:"fields",
+    fields:[
+      {label:"العنصر الأول", model:"بناء قنوات اتصال فعالة (داخلية أو خارجية).", w:5,
+       kw:["قنوات اتصال","قناه اتصال","قنوات","اتصال"]},
+      {label:"العنصر الثاني", model:"قياس درجة رضا العميل (داخلي وخارجي) تحت مبدأ التركيز على العميل.", w:5,
+       kw:["رضا العميل","رضا","العميل","عميل داخلي","عميل خارجي","التركيز علي العميل"]},
+      {label:"العنصر الثالث", model:"قياس الأداء.", w:5,
+       kw:["قياس الاداء","الاداء","اداء"]},
+      {label:"العنصر الرابع", model:"التدريب.", w:5,
+       kw:["تدريب","تاهيل"]}
+    ]
+  },
+  {
+    text:"ذكرنا في المحاضرة الثانية مفهوم الرقابة الكلية على الجودة الذي أكد عليه رواد إدارة الجودة الشاملة، من هو؟",
+    model:"أرماند فايجنباوم.",
+    max:10, type:"essay",
+    groups:[
+      {name:"ذِكر اسم «أرماند فايجنباوم» بصيغة صحيحة", w:10,
+       kw:["فايجنباوم","فيجنباوم","فاجنباوم","faigenbaum","feigenbaum","vaigenbaum","ارماند","ارمان"]}
+    ]
+  },
+  {
+    text:"تعد مرحلة التهيئة والإعداد أصعب مراحل تطبيق إدارة الجودة الشاملة؟",
+    model:"لأنها ترتبط بتغيير قناعات الأفراد وعاداتهم، وهذا يستغرق وقتًا طويلًا لحدوثه، كما يجب أن يكون لدى الإدارة العليا مبررات قوية لإقناع الأفراد بالتغيير.",
+    max:20, type:"essay",
+    groups:[
+      {name:"المرحلة ترتبط بتغيير قناعات الأفراد وعاداتهم", w:7, kw:["قناعات","معتقدات","عادات","سلوك","تغيير","نمط"]},
+      {name:"التغيير يستغرق وقتًا طويلًا", w:5, kw:["وقت","طويل","مده","بطيء","استغرق","يحتاج وقتا"]},
+      {name:"حاجة الإدارة العليا إلى مبررات قوية", w:4, kw:["اداره عليا","قيه","اداره","مبررات","اسباب قويه","حجج"]},
+      {name:"ضرورة إقناع الأفراد بالتغيير", w:4, kw:["اقناع","اقناع الافراد","تقبل","استيعاب","اقناعهم"]}
+    ]
+  },
+  {
+    text:"ما أهمية التدريب؟",
+    model:"يغير التدريب الاتجاهات ويرفع القدرات وينمي المهارات بما يحسن الأداء بشكل عام.",
+    max:10, type:"essay",
+    groups:[
+      {name:"تغيير الاتجاهات والمواقف", w:3, kw:["اتجاهات","مواقف","سلوك","نظرة"]},
+      {name:"رفع القدرات", w:3, kw:["قدرات","قدره","رفع"]},
+      {name:"تنمية المهارات", w:2, kw:["مهارات","مهاره","تنميه","اكساب مهارات"]},
+      {name:"تحسين الأداء بشكل عام", w:2, kw:["اداء","تحسين","تطوير","فعاليه"]}
+    ]
+  },
+  {
+    text:"هل يقصد بالتقويم عملية التقويم النهائي بعد التنفيذ للحكم على جودة التغيير؟",
+    model:"بالتأكيد لا، إنما التقويم هنا عملية مستمرة تبدأ معنا منذ التخطيط ووضع الأهداف نفسها، وتصاحب كل مرحلة من المراحل السابقة، وبالتالي التقويم تقويم مستمر.",
+    max:15, type:"essay",
+    groups:[
+      {name:"الإجابة بالنفي: ليس تقويما نهائيا فقط بعد التنفيذ", w:4, kw:["ليس","لا","لأ","ليس صحيح","خطا","غير صحيح","نهائي","نهايه","بعد التنفيذ فقط"]},
+      {name:"التقويم عملية مستمرة", w:5, kw:["مستمر","مستمره","استمراري","متواصل","مستمره باستمرار"]},
+      {name:"يبدأ منذ التخطيط ووضع الأهداف", w:3, kw:["تخطيط","اهداف","وضع الاهداف","بدايه","منذ"]},
+      {name:"يصاحب كل مرحلة من مراحل التطبيق", w:3, kw:["مرحله","مراحل","يصاحب","تصاحب","ترافق","كل مرحله"]}
+    ]
+  }
+];
+
+/* ================= الحالة ================= */
+let current = 0;
+let answers = QUESTIONS.map(q => q.type === "fields" ? ["","","",""] : "");
+const answeredSet = new Set();
+
+/* ================= أدوات النص العربي ================= */
+function norm(s){
+  return (s||"")
+    .replace(/[\u064B-\u0652\u0670\u0640]/g,"")   // تشكيل وتطويل
+    .replace(/[أإآٱ]/g,"ا")
+    .replace(/ى/g,"ي")
+    .replace(/ؤ/g,"و")
+    .replace(/ئ/g,"ي")
+    .replace(/ة/g,"ه")
+    .replace(/\s+/g," ")
+    .toLowerCase()
+    .trim();
+}
+function containsAny(text, kws){
+  return kws.some(k => text.includes(norm(k)));
+}
+
+/* ================= شاشة البداية ================= */
+function startQuiz(){
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("quizScreen").classList.remove("hidden");
+  buildDots();
+  renderQuestion();
+}
+
+/* ================= عرض الأسئلة ================= */
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  const card = document.getElementById("qCard");
+  let body = `<span class="q-num">السؤال ${current+1} — درجته ${q.max} من 100</span>
+              <div class="q-text">${q.text}</div>`;
+  if(q.type === "fields"){
+    body += `<div class="fields-grid">` + q.fields.map((f,i)=>{
+      const val = answers[current][i] || "";
+      return `<div class="field-box"><label>${f.label}</label>
+        <textarea data-field="${i}" placeholder="اكتب ${f.label} هنا...">${val}</textarea></div>`;
+    }).join("") + `</div>`;
+  } else {
+    body += `<textarea id="essayBox" placeholder="اكتب إجابتك هنا بأسلوبك الخاص...">${answers[current]||""}</textarea>`;
+  }
+  card.innerHTML = body;
+
+  card.querySelectorAll("textarea").forEach(ta=>{
+    ta.addEventListener("input", saveAnswer);
+    ta.classList.toggle("answered", ta.value.trim().length > 0);
+  });
+
+  document.getElementById("qNow").textContent = current+1;
+  document.getElementById("progressBar").style.width = ((current+1)/QUESTIONS.length*100)+"%";
+  document.getElementById("prevBtn").disabled = (current === 0);
+  document.getElementById("nextBtn").disabled = (current === QUESTIONS.length-1);
+  updateDots();
+  updateCounter();
+}
+
+function saveAnswer(e){
+  const ta = e.target;
+  const f = ta.dataset.field;
+  if(f !== undefined){
+    answers[current][Number(f)] = ta.value;
+    if(ta.value.trim()) answeredSet.add(current);
+  } else {
+    answers[current] = ta.value;
+    if(ta.value.trim()) answeredSet.add(current);
+    else answeredSet.delete(current);
+  }
+  ta.classList.toggle("answered", ta.value.trim().length > 0);
+  updateCounter(); updateDots();
+}
+
+function updateCounter(){
+  document.getElementById("answeredCount").textContent = answeredSet.size;
+}
+
+/* ================= التنقل ================= */
+function goTo(i){
+  if(i < 0 || i >= QUESTIONS.length) return;
+  current = i;
+  renderQuestion();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function buildDots(){
+  const d = document.getElementById("dots");
+  d.innerHTML = QUESTIONS.map((_,i)=>`<button class="dot" onclick="goTo(${i})">${i+1}</button>`).join("");
+}
+function updateDots(){
+  document.querySelectorAll(".dot").forEach((dot,i)=>{
+    dot.classList.toggle("active", i===current);
+    dot.classList.toggle("done", answeredSet.has(i));
+  });
+}
+
+/* ================= محرك التصحيح (تحليل المعنى) ================= */
+function matchGroups(textNorm, groups){
+  let matched = [], missed = [], score = 0;
+  groups.forEach(g=>{
+    if(containsAny(textNorm, g.kw)){ matched.push(g); score += g.w; }
+    else missed.push(g);
+  });
+  return {matched, missed, score};
+}
+function gradeEssay(q, raw){
+  const t = norm(raw);
+  const empty = t.replace(/[^ء-غف-يa-z0-9]/g,"").length < 4;
+  if(empty) return {score:0, status:"bad", matched:[], missed:q.groups,
+    why:"لم يتم تقديم إجابة كافية لهذا السؤال.", missing:q.groups.map(g=>g.name)};
+
+  const {matched, missed, score} = matchGroups(t, q.groups);
+  const ratio = score / q.max;
+  let status;
+  if(ratio >= 0.99) status = "ok";
+  else if(ratio >= 0.35) status = "partial";
+  else if(ratio > 0.05) status = "review";
+  else status = "bad";
+
+  const why = status==="ok"
+    ? "تم التعرف على العناصر العلمية الأساسية كلها في إجابتك، والمعنى متوافق مع النموذج."
+    : status==="partial"
+    ? "إجابتك صحيحة في جزء من العناصر العلمية لكنها غير مكتملة؛ اطلع على النقاط الناقصة."
+    : status==="review"
+    ? "إجابتك تلمّح لبعض الأفكار لكنها غير واضحة أو غير مكتملة بما يكفي للحسم الآلي؛ يُفضَّل مراجعتها يدويًا."
+    : "لم يتم التعرف على العناصر العلمية المطلوبة في إجابتك.";
+
+  return {score, status, matched, missed, why, missing: missed.map(g=>g.name)};
+}
+
+function gradeFields(q, arr){
+  const parts = [];
+  let total = 0;
+  arr.forEach((raw,i)=>{
+    const t = norm(raw);
+    const f = q.fields[i];
+    const empty = t.replace(/[^ء-غف-يa-z0-9]/g,"").length < 3;
+    if(empty){ parts.push({label:f.label, score:0, status:"bad", why:"خانة فارغة."}); return; }
+    if(containsAny(t, f.kw)){
+      total += f.w;
+      parts.push({label:f.label, score:f.w, status:"ok", why:"العنصر مذكور وصحيح علميًا."});
+    } else {
+      parts.push({label:f.label, score:0, status:"review",
+        why:"لم يتم التعرف على عنصر التحسين المطلوب في هذه الخانة؛ تحتاج مراجعة يدوية."});
+    }
+  });
+  const okCount = parts.filter(p=>p.status==="ok").length;
+  let status = okCount===4 ? "ok" : okCount>=2 ? "partial" : okCount===1 ? "review" : "bad";
+  return {score: total, status, parts};
+}
+
+/* ================= التسليم والنتيجة ================= */
+function submitQuiz(){
+  const unanswered = QUESTIONS.length - answeredSet.size;
+  let msg = "هل أنت متأكد من تسليم الاختبار الآن؟";
+  if(unanswered > 0) msg = `لديك ${unanswered} سؤال بدون إجابة. ${msg}`;
+  if(!confirm(msg)) return;
+  showResults();
+}
+
+const STATUS_META = {
+  ok:      {cls:"st-ok",      label:"إجابة صحيحة"},
+  partial: {cls:"st-partial", label:"إجابة جزئية"},
+  review:  {cls:"st-review",  label:"تحتاج إلى مراجعة"},
+  bad:     {cls:"st-bad",     label:"إجابة خاطئة"}
+};
+
+function showResults(){
+  document.getElementById("quizScreen").classList.add("hidden");
+
+  let totalScore = 0, cOk=0, cPartial=0, cReview=0, cBad=0;
+  const review = [];
+
+  QUESTIONS.forEach((q,i)=>{
+    const res = q.type === "fields" ? gradeFields(q, answers[i]) : gradeEssay(q, answers[i]);
+    totalScore += res.score;
+    if(res.status==="ok") cOk++; else if(res.status==="partial") cPartial++;
+    else if(res.status==="review") cReview++; else cBad++;
+    review.push({q, res, i});
+  });
+
+  const pct = Math.round(totalScore);
+  const grade = pct>=90?"ممتاز 🌟":pct>=80?"جيد جدًا":pct>=65?"جيد":pct>=50?"مقبول":"ضعيف — تحتاج إلى مراجعة المادة";
+
+  document.getElementById("finalScore").textContent = totalScore;
+  document.getElementById("gradeWord").textContent = "التقدير العام: " + grade;
+  document.getElementById("percentText").textContent = "النسبة المئوية: " + pct + "٪";
+  document.getElementById("cOk").textContent = cOk;
+  document.getElementById("cPartial").textContent = cPartial;
+  document.getElementById("cReview").textContent = cReview;
+  document.getElementById("cBad").textContent = cBad;
+
+  const reviewQs = review.filter(r=>r.res.status==="review");
+  document.getElementById("reviewBanner").innerHTML = reviewQs.length
+    ? `<div class="review-list"><b>أسئلة تحتاج إلى مراجعة يدوية (${reviewQs.length}):</b>
+        ${reviewQs.map(r=>`السؤال ${r.i+1} (${STATUS_META.review.label})`).join(" — ")}</div>`
+    : "";
+
+  document.getElementById("reviewList").innerHTML = review.map(({q,res,i})=>{
+    const st = STATUS_META[res.status];
+    let studentAns, extra = "";
+    if(q.type === "fields"){
+      studentAns = q.fields.map((f,j)=>{
+        const v = (answers[i][j]||"").trim();
+        const ps = res.parts[j];
+        return `<div class="rev-block"><b>${f.label}</b> — <span class="rev-status ${STATUS_META[ps.status].cls}">${STATUS_META[ps.status].label} (${ps.score}/${f.w})</span><br>${v || "— بدون إجابة —"}<br><small style="color:var(--muted)">${ps.why}</small></div>`;
+      }).join("");
+      const missed = res.parts.filter(p=>p.status!=="ok");
+      extra = missed.length ? `<div class="rev-why"><b>العناصر الناقصة:</b> ${missed.map(p=>p.label).join("، ")}</div>` : "";
+    } else {
+      studentAns = `<div class="rev-block"><b>إجابة الطالب:</b><br>${(answers[i]||"").trim() || "— بدون إجابة —"}</div>`;
+      if(res.missed && res.missed.length && res.status!=="bad"){
+        extra = `<div class="rev-why"><b>النقاط الناقصة:</b> ${res.missing.join("؛ ")}</div>`;
+      }
+    }
+    return `<div class="rev-card">
+      <div class="rev-head">
+        <div class="rev-q">السؤال ${i+1}: ${q.text}</div>
+        <span class="rev-status ${st.cls}">${st.label}</span>
+      </div>
+      <div class="rev-score">الدرجة: ${res.score} من ${q.max}</div>
+      ${studentAns}
+      <div class="rev-block" style="background:#eef8f1;border:1px solid #cdeed9"><b>الإجابة النموذجية:</b><br>${q.model}</div>
+      <div class="rev-why"><b>سبب التقييم:</b> ${res.why}</div>
+      ${extra}
+    </div>`;
+  }).join("");
+
+  document.getElementById("resultScreen").classList.remove("hidden");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+</script>
+</body>
+</html>
